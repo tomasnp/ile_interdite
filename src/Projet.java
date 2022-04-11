@@ -3,44 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-/**
- * Application avec interface graphique.
- * Thibaut Balabonski, Université Paris-Sud.
- * Matériel pédagogique lié au cours POGL, séance du 20 avril 2020.
- * 
- * Un principe directeur est la séparation stricte des deux parties suivantes :
- *  - Le coeur de l'application, appelé le modèle, où est fait l'essentiel
- *    du travail.
- *  - L'interface utilisateur, appelée la vue, qui à la fois montre des choses
- *    à l'utilisateur et lui fournit des moyens d'interagir.
- *
- * Notre cas d'étude : le jeu de la vie de Conway.
- * Une grille bidimensionnelle de dimensions finies est peuplée de cellules
- * pouvant être vivantes ou mortes. À chaque tour un nouvel état est calculé
- * pour chaque cellule en fonction de l'état de ses voisines immédiates.
- * Un bouton permet de passer au tour suivant (on dit aussi la génération
- * suivante).
- */
-
-/**
- * Un lien entre vue et modèle : les informations montrées à l'utilisateur
- * reflètent l'état du modèle et doivent être maintenues à jour.
- * 
- * Pour réaliser cette synchronisation, on peut suivre le schéma de conception
- * observateur/observé, dont le principe est le suivant :
- *  - Un observateur (en l'occurrence la vue) est lié à un objet observé et se
- *    met à jour pour refléter les changement de l'observé.
- *  - Un observé est lié à un ensemble d'objets observateurs et les notifie de
- *    tout changement de son propre état.
- *
- * Java fournit une interface [Observer] (observateur) et une classe
- * [Observable] (observé) assurant cette jonction.
- * Voici une manière sommaire de les recoder.
- */
-
-/**
- * Interface des objets observateurs.
- */ 
 interface Observer {
     /**
      * Un observateur doit posséder une méthode [update] déclenchant la mise à
@@ -52,7 +14,6 @@ interface Observer {
      * changement qui a eu lieu.
      */
 }
-
 /**
  * Classe des objets pouvant être observés.
  */
@@ -77,9 +38,9 @@ abstract class Observable {
      * observateur.
      */
     public void notifyObservers() {
-	for(Observer o : observers) {
-	    o.update();
-	}
+		for(Observer o : observers) {
+			o.update();
+		}
     }
 }
 /** Fin du schéma observateur/observé. */
@@ -149,7 +110,7 @@ class CModele extends Observable {
 	for(int i=1; i<=LARGEUR; i++) {
 	    for(int j=1; j<=HAUTEUR; j++) {
 		if (Math.random() < .2) {
-		    cellules[i][j].etat = true;
+		    cellules[i][j].etat = 0;
 		}
 	    }
 	}
@@ -164,7 +125,7 @@ class CModele extends Observable {
 	 *  - D'abord, pour chaque cellule on évalue ce que sera son état à la
 	 *    prochaine génération.
 	 *  - Ensuite, on applique les évolutions qui ont été calculées.
-	 */ 
+
 	for(int i=1; i<LARGEUR+1; i++) {
 	    for(int j=1; j<HAUTEUR+1; j++) {
 		cellules[i][j].evalue();
@@ -175,6 +136,7 @@ class CModele extends Observable {
 		cellules[i][j].evolue();
 	    }
 	}
+	 */
 	/**
 	 * Pour finir, le modèle ayant changé, on signale aux observateurs
 	 * qu'ils doivent se mettre à jour.
@@ -186,8 +148,8 @@ class CModele extends Observable {
      * Méthode auxiliaire : compte le nombre de voisines vivantes d'une
      * cellule désignée par ses coordonnées.
      */
-    protected int compteVoisines(int x, int y) {
-	int res=0;
+    /*protected int compteVoisines(int x, int y) {
+	int res=0; */
 	/**
 	 * Stratégie simple à écrire : on compte les cellules vivantes dans le
 	 * carré 3x3 centré autour des coordonnées (x, y), puis on retire 1
@@ -196,12 +158,13 @@ class CModele extends Observable {
 	 * grâce aux lignes et colonnes supplémentaires qui ont été ajoutées
 	 * de chaque côté (dont les cellules sont mortes et n'évolueront pas).
 	 */
+	/*
 	for(int i=x-1; i<=x+1; i++) {
 	    for(int j=y-1; j<=y+1; j++) {
 		if (cellules[i][j].etat) { res++; }
 	    }
-	}
-	return (res - ((cellules[x][y].etat)?1:0));
+	}*/
+	//return (res - ((cellules[x][y].etat)?1:0));
 	/**
 	 * L'expression [(c)?e1:e2] prend la valeur de [e1] si [c] vaut [true]
 	 * et celle de [e2] si [c] vaut [false].
@@ -211,7 +174,7 @@ class CModele extends Observable {
 	 *     else { v = res - 0; }
 	 *     return v;
 	 */
-    }
+    //}
 
     /**
      * Une méthode pour renvoyer la cellule aux coordonnées choisies (sera
@@ -240,7 +203,7 @@ class Cellule {
     private CModele modele;
 
     /** L'état d'une cellule est donné par un booléen. */
-    protected boolean etat;
+    protected int etat;
     /**
      * On stocke les coordonnées pour pouvoir les passer au modèle lors
      * de l'appel à [compteVoisines].
@@ -248,33 +211,14 @@ class Cellule {
     private final int x, y;
     public Cellule(CModele modele, int x, int y) {
         this.modele = modele;
-        this.etat = false;
+        this.etat = 0;
         this.x = x; this.y = y;
     }
-    /**
-     * Le passage à la génération suivante se fait en deux étapes :
-     *  - D'abord on calcule pour chaque cellule ce que sera sont état à la
-     *    génération suivante (méthode [evalue]). On stocke le résultat
-     *    dans un attribut supplémentaire [prochainEtat].
-     *  - Ensuite on met à jour l'ensemble des cellules (méthode [evolue]).
-     * Objectif : éviter qu'une évolution immédiate d'une cellule pollue
-     * la décision prise pour une cellule voisine.
-     */
-    private boolean prochainEtat;
-    protected void evalue() {
-        switch (this.modele.compteVoisines(x, y)) {
-        case 2: prochainEtat=etat; break;
-        case 3: prochainEtat=true; break;
-        default: prochainEtat=false;
-        }
-    }
-    protected void evolue() {
-        etat = prochainEtat;
-    }
+
     
     /** Un test à l'usage des autres classes (sera utilisé par la vue). */
-    public boolean estVivante() {
-        return etat;
+    public boolean estVivant() {
+        return etat ==1 || etat ==0;
     }
 }    
 /** Fin de la classe Cellule, et du modèle en général. */
@@ -397,37 +341,25 @@ class VueGrille extends JPanel implements Observer {
      * La classe [Graphics] regroupe les éléments de style sur le dessin,
      * comme la couleur actuelle.
      */
-    public void paintComponent(Graphics g) {
-	super.repaint();
-	/** Pour chaque cellule... */
-	for(int i=1; i<=CModele.LARGEUR; i++) {
-	    for(int j=1; j<=CModele.HAUTEUR; j++) {
-		/**
-		 * ... Appeler une fonction d'affichage auxiliaire.
-		 * On lui fournit les informations de dessin [g] et les
-		 * coordonnées du coin en haut à gauche.
-		 */
-		paint(g, modele.getCellule(i, j), (i-1)*TAILLE, (j-1)*TAILLE);
-	    }
-	}
-    }
     /**
      * Fonction auxiliaire de dessin d'une cellule.
      * Ici, la classe [Cellule] ne peut être désignée que par l'intermédiaire
      * de la classe [CModele] à laquelle elle est interne, d'où le type
      * [CModele.Cellule].
      * Ceci serait impossible si [Cellule] était déclarée privée dans [CModele].
-     */
+
     private void paint(Graphics g, Cellule c, int x, int y) {
         /** Sélection d'une couleur. */
+	/*
 	if (c.estVivante()) {
 	    g.setColor(Color.BLACK);
 	} else {
             g.setColor(Color.WHITE);
         }
-        /** Coloration d'un rectangle. */
+        // Coloration d'un rectangle.
         g.fillRect(x, y, TAILLE, TAILLE);
     }
+	*/
 }
 
 
