@@ -1,48 +1,62 @@
 package Modele;
-/**
-import models.Zone;
 
-import java.util.ArrayList;
+import Modele.Zone;
 
 
  // Ile
 
 public class Ile {
 
-    private ArrayList<ArrayList<Zone>> grid;
+    private Zone[][] plateau;
+    private int taille;
 
-    public Ile(int size) {
-        grid = new ArrayList<ArrayList<Zone>>();
-        for (int j = 0; j < size; j++) {
-            ArrayList<Zone> line = new ArrayList<Zone>();
-            for (int i = 0; i < size; i++) {
-                if (Math.abs(i - (size - 1) / 2.) +
-                        Math.abs(j - (size - 1) / 2.) <= size / 2.) {
-                    line.add(new Zone(i, j));
+    public Ile(int taille){
+        this.taille = taille;
+        this.plateau = new Zone[taille][taille];
+        for (int i = 0; i < taille; i++) {
+            for (int j = 0; j < taille; j++) {
+                Zone z = new Zone(i,j);
+                this.plateau[i][j] = z;
+                if (Math.abs(i - (taille - 1) / 2.) +
+                        Math.abs(j - (taille - 1) / 2.) <= taille / 2.) {
+                    this.plateau[i][j].setEtat(0);
                 } else {
-                    line.add(null);
+                    this.plateau[i][j].setEtat(2);
                 }
+                
             }
-            grid.add(line);
         }
     }
 
-    public Zone getZone(int x, int y) {
-        return grid.get(y).get(x);
+    public Zone[][] getIleEtat(){
+        return plateau;
     }
 
-    public int getGridSize() {
-        return grid.size();
+    public Zone getZone(int i, int j) {
+        return this.plateau[i][j];
     }
 
-    public ArrayList<Integer> getCoordLine(int y) {
+    public int getGridtaille() {
+        return this.taille;
+    }
+
+    public void affiche(){
+        for(int i = 0; i<6; i++ ){
+            for(int j = 0; j<6;j++){
+
+                System.out.print(this.getZone(i, j));
+            }
+            System.out.println();
+        }
+    }
+
+/*     public ArrayList<Integer> getCoordLine(int y) {
         ArrayList<Integer> s = new ArrayList<Integer>();
-        for (int index = 0; index < grid.size(); index++) {
+        for (int index = 0; index < grid.taille(); index++) {
             if (grid.get(y).get(index) != null) {
                 s.add(index);
             }
         }
         return s;
-    }
+    } */
 }
-*/
