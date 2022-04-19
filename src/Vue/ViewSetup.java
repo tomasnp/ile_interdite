@@ -15,12 +15,18 @@ public class ViewSetup extends JPanel {
     public ViewSetup(Modele modele) {
 	this.modele = modele;
 	
-	JButton boutonAvance = new JButton(">");
-	this.add(boutonAvance);
+	JButton boutonDroite = new JButton(">");
+	JButton boutonHaut = new JButton("^");
+	JButton boutonBas = new JButton("v");
+	JButton boutonGauche = new JButton("<");
+	this.add(boutonDroite);
+	this.add(boutonHaut);
+	this.add(boutonBas);
+	this.add(boutonGauche);
 	
 	Controleur ctrl = new Controleur(modele);
 
-	boutonAvance.addActionListener(ctrl);
+	boutonDroite.addActionListener(ctrl);
 
 
     }

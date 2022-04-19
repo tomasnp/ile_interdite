@@ -3,16 +3,27 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class VueGrille extends JPanel{
-    
-    public VueGrille(int width, int height) {
+import Modele.Modele;
 
-        Dimension dim = new Dimension(width,height);
+public class VueGrille extends JPanel{
+    private Modele modele;
+    
+    final public int sizeJpanel;
+    
+    public VueGrille(int taille){
+        this.sizeJpanel = taille;
+    }
+
+    public VueGrille(Modele m) {
+        this.modele = m;
+        this.sizeJpanel = 30;
+        Dimension dim = new Dimension(400,400);
         setPreferredSize(dim);
         setLayout(new BorderLayout());
-        setBackground(new Color(0, 0, 128));
+        setBackground(new Color(0, 0, 200));
+        this.add(m.getIle());
     }
-    public void addElem(JComponent element) {
+    public void ajouteElement(JComponent element) {
         add(element);
     }
 }

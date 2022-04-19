@@ -1,16 +1,22 @@
 package Modele;
 
+
+import java.awt.*;
+
 import Modele.Zone;
+import Vue.VueGrille;
 
 
  // Ile
 
-public class Ile {
+public class Ile extends VueGrille {
 
     private Zone[][] plateau;
     private int taille;
+    
 
     public Ile(int taille){
+        super(taille);
         this.taille = taille;
         this.plateau = new Zone[taille][taille];
         for (int i = 0; i < taille; i++) {
@@ -19,9 +25,13 @@ public class Ile {
                 this.plateau[i][j] = z;
                 if (Math.abs(i - (taille - 1) / 2.) +
                         Math.abs(j - (taille - 1) / 2.) <= taille / 2.) {
-                    this.plateau[i][j].setEtat(0);
+                    
+                    this.plateau[i][j] = z;
+                    this.ajouteElement(z);
                 } else {
-                    this.plateau[i][j].setEtat(2);
+                    //Zone z = new Zone(i,j);
+                    z.setEtat(2);
+                    this.ajouteElement(z);
                 }
                 
             }
