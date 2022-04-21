@@ -14,18 +14,14 @@ public class Zone extends JPanel{
     public Zone(int x, int y){
         this.c = new Point(x, y);
         setPreferredSize(new Dimension(60, 60));
-        if(this.etat == 0)setBackground(Color.BLACK);
-        else if(this.etat == 1)setBackground(Color.LIGHT_GRAY);
-        else setBackground(Color.BLUE);
+        this.etat = 2;
     }
 
     public Zone(int x, int y, int e){
         this.c = new Point(x, y);
         this.etat = e;
         setPreferredSize(new Dimension(60, 60));
-        if(this.etat == 0)setBackground(Color.BLACK);
-        else if(this.etat == 1)setBackground(Color.LIGHT_GRAY);
-        else setBackground(Color.BLUE);
+        
     }
 
     public Point getCoord(){return this.c;}
@@ -34,20 +30,24 @@ public class Zone extends JPanel{
     public Tresor getTresor(){return this.aTresor;}
 
     public void setEtat(int e){
-        if(this.etat == 0)setBackground(Color.BLACK);
-        else if(this.etat == 1)setBackground(Color.LIGHT_GRAY);
-        else setBackground(Color.BLUE);
+        if(e == 0){setBackground(Color.GREEN);}
+        else if(e == 1){System.out.println("BLUE");setBackground(Color.BLUE);}
+        else setBackground(Color.BLACK);
         this.etat = e;
     }
 
     public void noie(){
-        if(this.etat != 2){
-            this.etat++;
+        int et = this.etat;
+        if(et < 2){
+            System.out.println("NOIE");
+            this.setEtat(et+1);
         }
     }
     public void asseche(){
-        if(this.etat != 0){
-            this.etat--;
+        int et = this.etat;
+        if(et > 0){
+            System.out.println("DRY");
+            this.setEtat(et-1);
         }
     }
 

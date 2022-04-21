@@ -20,7 +20,6 @@ public class VueGrille extends JPanel{
         Dimension dim = new Dimension(400,400);
         setPreferredSize(dim);
         setLayout(new BorderLayout());
-        setBackground(new Color(0, 0, 200));
         this.add(m.getIle());
     }
     public void ajouteElement(JComponent element) {

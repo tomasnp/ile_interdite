@@ -8,7 +8,7 @@ import Modele.*;
 
 public class Vue extends JFrame {
     private JFrame frame;
-    private ViewSetup setup;
+    private VueCommandes setup;
     private VueGrille grid;
     final int height = 200;
     final int width = 200;
@@ -23,15 +23,15 @@ public class Vue extends JFrame {
         //frame.setResizable(false);
         
     
-        frame.setLayout(new GridLayout());
+        frame.setLayout(new FlowLayout(100));
         //Ile ile = new Ile(6);
         //frame.add(ile);
         VueGrille grille;
-        ViewSetup commandes;
+        VueCommandes commandes;
         grille = new VueGrille(modele);
 
         frame.add(grille);
-        commandes = new ViewSetup(modele);
+        commandes = new VueCommandes(modele);
         frame.add(commandes); 
         
         frame.pack();

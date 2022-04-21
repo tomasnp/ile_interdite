@@ -1,6 +1,4 @@
 package Modele;
-/**
-import models.Zone;
 
 import java.util.ArrayList;
 
@@ -10,12 +8,12 @@ public class Joueur {
     private final int nbActions;
 
     private Zone position;
-    private String name;
+    private String nom;
     private ArrayList<Integer> card;
 
     // Constructeur
     public Joueur(String name, Zone zone) {
-        this.name = name;
+        this.nom = name;
         this.card = new ArrayList<Integer>();
         this.nbActions = 3;
         position = zone;
@@ -26,8 +24,8 @@ public class Joueur {
         this.position = z;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNom(String name) {
+        this.nom = name;
     }
 
     public void addcard(int x) {
@@ -39,8 +37,8 @@ public class Joueur {
         return this.position;
     }
 
-    public String getName() {
-        return this.name;
+    public String getNom() {
+        return this.nom;
     }
 
     public int getcard(int num) {
@@ -54,5 +52,6 @@ public class Joueur {
     public int getNbActions() {
         return this.nbActions;
     }
+    
 }
- */
+ 

@@ -10,4 +10,13 @@ public class Modele{
     public Ile getIle() {
         return ile;
     }
+
+   
+
+    public void FinTour(){
+        this.getIle().randomZone().noie();
+        
+        this.getIle().randomZone().noie();
+        this.getIle().randomZone().noie();
+    }
 }

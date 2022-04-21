@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Projet",
+            "request": "launch",
+            "mainClass": "Projet",
+            "projectName": "ile_interdite_d5251f0f"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
