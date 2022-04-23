@@ -5,16 +5,20 @@ import java.util.ArrayList;
 
  // Players
 public class Joueur {
-    private final int nbActions;
+    private int nbActions;
 
     private Zone position;
     private String nom;
-    private ArrayList<Integer> card;
+    private ArrayList<Integer> cles;
+    private ArrayList<Integer> tresors;
+
+
 
     // Constructeur
     public Joueur(String name, Zone zone) {
         this.nom = name;
-        this.card = new ArrayList<Integer>();
+        this.cles = new ArrayList<Integer>();
+        this.tresors = new ArrayList<Integer>();
         this.nbActions = 3;
         position = zone;
     }
@@ -28,10 +32,6 @@ public class Joueur {
         this.nom = name;
     }
 
-    public void addcard(int x) {
-        this.card.add(x);
-    }
-
     // Getter
     public Zone getPosition() {
         return this.position;
@@ -41,17 +41,46 @@ public class Joueur {
         return this.nom;
     }
 
-    public int getcard(int num) {
-        return this.card.get(num);
-    }
-
-    public ArrayList<Integer> getAllCards() {
-        return this.card;
-    }
-
     public int getNbActions() {
         return this.nbActions;
     }
+
+    public boolean aCle(int i){
+        if(this.cles.size() == 0){return false;}
+        for(int j = 0; j<this.cles.size(); j++){
+            if(this.cles.get(j)==i){return true;}
+        }
+        return false;
+    }
+
+    public void resetAction() {
+        this.nbActions = 3;
+    }
+
+    public void setAction(int n) {
+        this.nbActions = n;
+    }
+    
+    public void ajouteCle(int i){this.cles.add(i);}
+
+    public void ajouteTresor(int i){this.tresors.add(i);}
+
+    public void deplace(Zone z) {
+        this.position = z;
+        this.nbActions--;
+    }
+
+    public String getComment() {
+        String comment = nom + " :\n\n";
+
+        comment += " - move a space\n\n";
+        comment += " - dig a space\n\n";
+        comment += " - win treasure\n\n";
+        comment += "\n\n   "+ this.getNbActions() + " remaining action\n";
+
+        return comment;
+    }
+
     
 }
  

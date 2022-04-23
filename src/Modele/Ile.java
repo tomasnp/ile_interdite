@@ -2,22 +2,21 @@ package Modele;
 
 
 import java.awt.*;
+import java.util.*;
 
-import Modele.Zone;
 import Vue.*;
 import java.util.Random;
 
 
  // Ile
 
-public class Ile extends VueGrille {
+public class Ile {
 
     private Zone[][] plateau;
     private int taille;
     private Random rand; 
 
     public Ile(int taille){
-        super(taille);
         this.taille = taille;
         this.plateau = new Zone[taille][taille];
         for (int i = 0; i < taille; i++) {
@@ -26,11 +25,10 @@ public class Ile extends VueGrille {
                 this.plateau[i][j] = z;
                 if (Math.abs(i - (taille - 1) / 2.) +
                         Math.abs(j - (taille - 1) / 2.) <= taille / 2.) {
-                    z.setEtat(0);
-                    this.ajouteElement(z);
+                    z.setEtat(0);       
+                    
                 } else {
                     z.setEtat(2);
-                    this.ajouteElement(z);
                 }
                 
             }
@@ -46,9 +44,52 @@ public class Ile extends VueGrille {
         return this.plateau[i][j];
     }
 
-    public int getGridtaille() {
+    public int gettaille() {
         return this.taille;
     }
+
+    public Random getRand() {
+        return this.rand;
+    }
+
+
+    public void enleveCle(int c) {
+
+        boolean fin = false;
+
+        for (int y = 0; y < taille - 1; y++) {
+            if (y == 0 || y == taille - 1) {
+                for (int x = 2; x < 4; x++) {
+                    if (this.plateau[x][y].getCle() == c) {
+                        this.plateau[x][y].enleveCle();
+                        fin = true;
+                        break;
+                    }
+                }
+            }
+            if (y == 1 || y == taille - 2) {
+                for (int x = 1; x < 5; x++) {
+                    if (this.plateau[x][y].getCle() == c) {
+                        this.plateau[x][y].enleveCle();
+                        fin = true;
+                        break;
+                    }
+                }
+            }
+            for (int x = 0; x < taille; x++) {
+                if (this.plateau[x][y].getCle() == c) {
+                    this.plateau[x][y].enleveCle();
+                    fin = true;
+                    break;
+                }
+            }
+            if (fin) {
+                break;
+            }
+        }
+    }
+
+
 
     public void affiche(){
         for(int i = 0; i<6; i++ ){
@@ -92,6 +133,15 @@ public class Ile extends VueGrille {
             if(ileSubmerg()){b=false;}
         }
         return getZone(x,y);
+    }
+
+    public ArrayList<Zone> neighbours(Zone p) {
+        ArrayList<Zone> neighbours = new ArrayList<Zone>();
+        neighbours.add(this.getZone(p.getCoord().x, p.getCoord().y + 1));
+        neighbours.add(this.getZone(p.getCoord().x, p.getCoord().y - 1));
+        neighbours.add(this.getZone(p.getCoord().x + 1, p.getCoord().y));
+        neighbours.add(this.getZone(p.getCoord().x - 1, p.getCoord().y));
+        return neighbours;
     }
 
 /*     public ArrayList<Integer> getCoordLine(int y) {

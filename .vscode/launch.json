@@ -9,6 +9,13 @@
             "name": "Launch Projet",
             "request": "launch",
             "mainClass": "Projet",
+            "projectName": "ile_interdite copie_ae003d3c"
+        },
+        {
+            "type": "java",
+            "name": "Launch Projet",
+            "request": "launch",
+            "mainClass": "Projet",
             "projectName": "ile_interdite_d5251f0f"
         },
         {

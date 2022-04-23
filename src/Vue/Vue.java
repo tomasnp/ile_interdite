@@ -7,36 +7,70 @@ import javax.swing.*;
 import Modele.*;
 
 public class Vue extends JFrame {
+    private Modele modele;
     private JFrame frame;
-    private VueCommandes setup;
-    private VueGrille grid;
+    private Menu setup;
+    private VueCommandes commandes;
+    private VueGrille grille;
+    private VueJoueur joue;
     final int height = 200;
     final int width = 200;
     private JPanel elements;
     private JTextArea comment;
-   //private ContrEndTurn contrEndTurn;
+    private JPanel panel;
+    private JLabel label;
+
 
 
     public Vue(Modele modele) {
         frame = new JFrame();
         frame.setTitle("ILE INTERDITE");
         //frame.setResizable(false);
-        
-    
-        frame.setLayout(new FlowLayout(100));
-        //Ile ile = new Ile(6);
-        //frame.add(ile);
-        VueGrille grille;
-        VueCommandes commandes;
-        grille = new VueGrille(modele);
+        frame.setLayout(new BorderLayout(20,30));
 
-        frame.add(grille);
-        commandes = new VueCommandes(modele);
-        frame.add(commandes); 
+        //this.setup = new Menu(this.modele, this);
+        //frame.add(setup);
+        this.grille = new VueGrille(modele);
+
+        frame.add(grille,BorderLayout.CENTER);
+        this.commandes = new VueCommandes(modele);
+        frame.add(commandes,BorderLayout.EAST); 
+        this.joue = new VueJoueur(modele);
+        frame.add(joue,BorderLayout.SOUTH); 
+
+        /* panel = new JPanel();
+
+		panel.setBackground(Color.GRAY);
+		frame.add(panel, BorderLayout.SOUTH);
+		label = new JLabel("Nombres d'actions restantes :  " + modele.getjoueurAct().getNbActions());
+		panel.add(label);
+		label.setForeground(Color.WHITE);
+		label.setFont(new Font("Sans-serif", Font.BOLD, 10)); */
+
         
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    public Vue(Modele modele,int n) {
+        frame = new JFrame();
+        frame.setTitle("MENU");
+        frame.setAlwaysOnTop(true);
+        
+    
+        frame.setLayout(new FlowLayout(100));
+        this.setup = new Menu(this.modele, this);
+        frame.add(setup);
+
+        
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    public void setup() {
+        add(this.setup);
     }
 
     public void start() {
@@ -49,24 +83,24 @@ public class Vue extends JFrame {
 
         comment = new JTextArea();
         comment.setFont(comment.getFont().deriveFont(20f));
-        comment.setPreferredSize(new Dimension(300, this.grid.sizeJpanel - 40));
-        comment.setBackground(new Color(100, 100, 100));
-        //changeText();
+        comment.setPreferredSize(new Dimension(300, this.grille.TAILLE - 40));
+        comment.setBackground(new Color(255, 0, 100));
+        changeText();
 
-        JButton next = new JButton("End of turn");
-        next.setPreferredSize(new Dimension(this.grid.sizeJpanel / 3, 50));
-        //next.addActionListener(contrEndTurn);
-        JButton dig = new JButton("Dig");
-        dig.setPreferredSize(new Dimension(this.grid.sizeJpanel / 3, 50));
-        JButton pick = new JButton("Pick");
-        pick.setPreferredSize(new Dimension(this.grid.sizeJpanel / 3, 50));
-
-        elements.add(this.grid);
+       
+        elements.add(this.grille);
         elements.add(this.comment);
-        elements.add(next);
-        elements.add(dig);
-        elements.add(pick);
-
         repaint();
     }
+
+    public void changeText() {
+        String text = modele.getjoueurAct().getComment();
+        this.comment.setText(text);
+        this.comment.repaint();
+    }
+
+    public Menu getViewSetup() {
+        return this.setup;
+    }
+
 }
