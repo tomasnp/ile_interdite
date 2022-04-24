@@ -6,11 +6,12 @@ import javax.swing.JPanel;
 
 //Zone
 public class Zone extends JPanel{
-    private Modele modele;
+    //private Modele modele;
     private Point c;
     private int etat;  // 0 : normale ; 1 : submergé ; 2 :  inondée
     private int cle; // -1 pas de Cle
     private int tresor; // -1 pas de Tresor
+    private boolean heli; 
 
     public Zone(int x, int y){
         this.c = new Point(x, y);
@@ -18,6 +19,7 @@ public class Zone extends JPanel{
         this.etat = 2;
         this.cle = -1;
         this.tresor = -1;
+        this.heli = false;
     }
 
     public Zone(Modele m,int x, int y, int e){
@@ -33,6 +35,7 @@ public class Zone extends JPanel{
     public boolean aTresor(){return this.tresor > -1 ;}
     public int getCle(){return this.cle;}
     public int getTresor(){return this.tresor;}
+    public boolean aHeli(){return this.heli;}
 
 
 
@@ -42,16 +45,11 @@ public class Zone extends JPanel{
         else setBackground(Color.BLACK);
         this.etat = e;
     }
-
+    public void poseHeli(){this.heli = true;}
     public void donneTresor(int t){this.tresor = t;}
 
-    public void enleveCle(){
-        this.cle = -1;
-    }
-
-    public void enleveTresor(){
-        this.tresor = -1;
-    }
+    public void enleveCle(){this.cle = -1;}
+    public void enleveTresor(){this.tresor = -1;}
 
     public void noie(){
         int et = this.etat;

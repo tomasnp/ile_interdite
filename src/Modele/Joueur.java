@@ -12,8 +12,6 @@ public class Joueur {
     private ArrayList<Integer> cles;
     private ArrayList<Integer> tresors;
 
-
-
     // Constructeur
     public Joueur(String name, Zone zone) {
         this.nom = name;
@@ -45,12 +43,20 @@ public class Joueur {
         return this.nbActions;
     }
 
-    public boolean aCle(int i){
-        if(this.cles.size() == 0){return false;}
+    public int aCle(int i){
+        if(this.cles.size() == 0){return 0;}
         for(int j = 0; j<this.cles.size(); j++){
-            if(this.cles.get(j)==i){return true;}
+            if(this.cles.get(j)==i){return 1;}
         }
-        return false;
+        return 0;
+    }
+
+    public int aTresor(int i){
+        if(this.tresors.size() == 0){return 0;}
+        for(int j = 0; j<this.tresors.size(); j++){
+            if(this.tresors.get(j)==i){return 1;}
+        }
+        return 0;
     }
 
     public void resetAction() {

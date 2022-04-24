@@ -1,7 +1,7 @@
 package Modele;
 
 import Vue.*;
-
+import java.util.Random;
 import java.util.ArrayList;
 
 public class Modele extends Observable{
@@ -11,7 +11,6 @@ public class Modele extends Observable{
     private ArrayList<Integer> tresors;
     public Joueur tom;
     private int joueurAct;
-    private Zone heliport;
 
     public Modele(int size) {
         this.ile = new Ile(size);
@@ -28,9 +27,10 @@ public class Modele extends Observable{
         this.tresors.add(3);
 
         for(int i = 0; i< tresors.size(); i++){
-            this.ile.randomZone().donneTresor(i);
+            this.ile.randomZoneVide().donneTresor(i);
         }
 
+        this.ile.randomZoneVide().poseHeli();
 
         this.tom = new Joueur("1", ile.randomZone());
         Joueur tom2 = new Joueur("2", ile.randomZone());
@@ -68,7 +68,7 @@ public class Modele extends Observable{
         this.joueurAct = (this.joueurAct + 1) % this.joueurs.size();
     }
 
-    public ArrayList<Zone> zonesAccessibles(Joueur joueur) {
+/*     public ArrayList<Zone> zonesAccessibles(Joueur joueur) {
         ArrayList<Zone> access = new ArrayList<Zone>();
         for(Zone z : getIle().neighbours(joueur.getPosition())){
             if(z.getEtat() !=2 ){
@@ -76,7 +76,7 @@ public class Modele extends Observable{
             }
         }
         return access;
-    }
+    } */
 
      //Méthodes de déplacement
 
@@ -267,7 +267,7 @@ public class Modele extends Observable{
         int y = j.getPosition().getCoord().y;
         Zone z = this.getZone(x,y);
 
-        if((z.aTresor()) && j.aCle(z.getTresor())){
+        if((z.aTresor()) /*&& j.aCle(z.getTresor())*/){
             j.ajouteTresor(z.getTresor());
             z.enleveTresor();
             int nbAct = j.getNbActions() - 1;
@@ -293,14 +293,57 @@ public class Modele extends Observable{
 
     }
 
+    public boolean PartiePerdu(){
+        int size = this.getIle().gettaille();
+        for( int i = 0; i < size; i++){
+            for( int j = 0; j < size; j++){
+                if(this.getZone(i, j).aHeli() && this.getZone(i, j).getEtat() == 2){
+                    return true;
+                }
+                if(this.getZone(i, j).aTresor()&& this.getZone(i, j).getEtat() == 2){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean PartieGagnee(){
+        int size = this.getIle().gettaille();
+        int cpt = 0;
+        for( int i = 0; i < size; i++){
+            for( int j = 0; j < size; j++){
+                if(this.getZone(i, j).aHeli()){
+                    for(int k = 0; k < this.getjoueurs().size(); k++){
+                        if(getjoueurs().get(k).getPosition() == this.getZone(i, j)){
+                            cpt++;
+                        }
+                    }
+                }
+            }
+        }
+        return cpt == this.getjoueurs().size();
+
+    }
 
 
 
     public void FinTour(){
-        this.getIle().randomZone().noie();
-        this.getIle().randomZone().noie();
-        this.getIle().randomZone().noie();
-        this.joueurSuiv();
+        Zone z1 = this.getIle().randomZone();
+        z1.noie();
+        Zone z2 = this.getIle().randomZone();
+        while(z1 == z2){
+            z2 = this.getIle().randomZone();
+            if(this.getIle().ileInondee() || this.getIle().ileSubmerg())break;
+        }
+        z2.noie();
+        Zone z3 = this.getIle().randomZone();
+        while(z3 == z2 || z3 == z1){
+            z3= this.getIle().randomZone();
+            if(this.getIle().ileInondee() || this.getIle().ileSubmerg())break;
+        }
+        z3.noie();
         notifyObservers();
+        this.joueurSuiv();
     }
 }

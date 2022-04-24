@@ -36,21 +36,42 @@ public class VueGrille extends JPanel implements Observer{
                     }
                 }
                 placeTresor(g,z,i,j);
+                placeHeliport(g, z, i, j);
 
 
             }
+        }
+        if(modele.PartiePerdu()){
+            gameOver(g);
+
+        }
+
+        if(modele.PartieGagnee()){
+            gameWin(g);
+
         }
     }
 
     private void paint(Graphics g, Zone z, int x, int y) {
         if (z.getEtat()==2) {
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, TAILLE, TAILLE);
             g.setColor(Color.BLACK);
+            
+            g.fillRect(x, y, TAILLE, TAILLE);
         } else if (z.getEtat()==1) {
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, TAILLE, TAILLE);
             g.setColor(Color.BLUE);
+            g.fillRect(x, y, TAILLE, TAILLE);
         } else if(z.getEtat()==0){
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, TAILLE, TAILLE);
             g.setColor(Color.GREEN);
+            g.fillRect(x, y, TAILLE, TAILLE);
         } else {
             g.setColor(Color.orange);
+            g.fillRect(x, y, TAILLE, TAILLE);
         }
         g.fillRect(x, y, TAILLE, TAILLE);
         this.update();
@@ -68,34 +89,34 @@ public class VueGrille extends JPanel implements Observer{
 
      private void placeTresor(Graphics g, Zone z, int x, int y){
         if(z.getTresor()==0){
-            g.setColor(Color.ORANGE);
-            g.drawRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
-            g.fillRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
+            g.setColor(new Color(255,132,0));
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
             g.setColor(Color.BLACK);
-            g.drawString("FEU",x*TAILLE + TAILLE/2+5, y*TAILLE + TAILLE/2+15);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
+            g.drawString("FEU",x*TAILLE+37, y*TAILLE + TAILLE/2+5);
         }
         if(z.getTresor()==1){
-            g.setColor(new Color(0,130,0));
-            g.drawRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
-            g.fillRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
-            g.setColor(Color.BLACK);
-            g.drawString("TERRE",x*TAILLE + TAILLE/2+5, y*TAILLE + TAILLE/2+15);
+            g.setColor(new Color(88,41,0));
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
+            g.setColor(Color.WHITE);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
+            g.drawString("TERRE",x*TAILLE+30, y*TAILLE + TAILLE/2+5);
         }
 
         if(z.getTresor()==2){
-            g.setColor(new Color(0,0,130));
-            g.drawRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
-            g.fillRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
-            g.setColor(Color.BLACK);
-            g.drawString("EAU",x*TAILLE + TAILLE/2+5, y*TAILLE + TAILLE/2+15);
+            g.setColor(new Color(0,0,120));
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
+            g.setColor(Color.WHITE);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
+            g.drawString("EAU",x*TAILLE+37, y*TAILLE + TAILLE/2+5);
         }
 
         if(z.getTresor()==3){
             g.setColor(Color.WHITE);
-            g.drawRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
-            g.fillRect(x*TAILLE + TAILLE/2, y*TAILLE + TAILLE/2, 60, 20);
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
             g.setColor(Color.BLACK);
-            g.drawString("AIR",x*TAILLE + TAILLE/2+5, y*TAILLE + TAILLE/2+15);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
+            g.drawString("AIR",x*TAILLE+37, y*TAILLE + TAILLE/2+5);
         }
 
     } 
@@ -105,89 +126,173 @@ public class VueGrille extends JPanel implements Observer{
         if(modele.getjoueurs().size()==1){
             if(j == this.modele.getjoueurs().get(0)){
                 g.setColor(Color.RED);
-                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
                 g.fillOval(x*TAILLE, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+3, y*TAILLE+20);
+                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+10, y*TAILLE+20);
             }
         }
 
         if(modele.getjoueurs().size()==2){
             if(j == this.modele.getjoueurs().get(0)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("←",x*TAILLE+32, y*TAILLE+20);
+                }
                 g.setColor(Color.RED);
-                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
                 g.fillOval(x*TAILLE, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+3, y*TAILLE+20);
+                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+10, y*TAILLE+20);
             }
 
             if(j == this.modele.getjoueurs().get(1)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("→",x*TAILLE+50, y*TAILLE+20);
+                }
                 g.setColor(Color.CYAN);
-                g.drawOval(x*TAILLE+50, y*TAILLE, 30,30);
-                g.fillOval(x*TAILLE+50, y*TAILLE, 30,30);
+                
+                g.fillOval(x*TAILLE+68, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+53, y*TAILLE+20);
+                g.drawOval(x*TAILLE+68, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+78, y*TAILLE+20);
             }
         }
 
         if(modele.getjoueurs().size()==3){
             if(j == this.modele.getjoueurs().get(0)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("←",x*TAILLE+32, y*TAILLE+20);
+                }
                 g.setColor(Color.RED);
-                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
                 g.fillOval(x*TAILLE, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+3, y*TAILLE+20);
+                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+10, y*TAILLE+20);
             }
 
             if(j == this.modele.getjoueurs().get(1)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("→",x*TAILLE+50, y*TAILLE+20);
+                }
                 g.setColor(Color.CYAN);
-                g.drawOval(x*TAILLE+50, y*TAILLE, 30,30);
-                g.fillOval(x*TAILLE+50, y*TAILLE, 30,30);
+                
+                g.fillOval(x*TAILLE+68, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+53, y*TAILLE+20);
+                g.drawOval(x*TAILLE+68, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+78, y*TAILLE+20);
             }
 
             if(j == this.modele.getjoueurs().get(2)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("←",x*TAILLE+32, y*TAILLE+88);
+                }
                 g.setColor(Color.PINK);
-                g.drawOval(x*TAILLE, y*TAILLE+50, 30,30);
-                g.fillOval(x*TAILLE, y*TAILLE+50, 30,30);
+                
+                g.fillOval(x*TAILLE, y*TAILLE+68, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+3, y*TAILLE+70);
+                g.drawOval(x*TAILLE, y*TAILLE+68, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+10, y*TAILLE+88);
             }
         }
 
         if(modele.getjoueurs().size()==4){
             if(j == this.modele.getjoueurs().get(0)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("←",x*TAILLE+32, y*TAILLE+20);
+                }
                 g.setColor(Color.RED);
-                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
                 g.fillOval(x*TAILLE, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+3, y*TAILLE+20);
+                g.drawOval(x*TAILLE, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+10, y*TAILLE+20);
             }
 
             if(j == this.modele.getjoueurs().get(1)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("→",x*TAILLE+50, y*TAILLE+20);
+                }
                 g.setColor(Color.CYAN);
-                g.drawOval(x*TAILLE+50, y*TAILLE, 30,30);
-                g.fillOval(x*TAILLE+50, y*TAILLE, 30,30);
+                g.fillOval(x*TAILLE+68, y*TAILLE, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+53, y*TAILLE+20);
+                g.drawOval(x*TAILLE+68, y*TAILLE, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+78, y*TAILLE+20);
             }
 
             if(j == this.modele.getjoueurs().get(2)){
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("←",x*TAILLE+32, y*TAILLE+88);
+                }
                 g.setColor(Color.PINK);
-                g.drawOval(x*TAILLE, y*TAILLE+50, 30,30);
-                g.fillOval(x*TAILLE, y*TAILLE+50, 30,30);
+                
+                g.fillOval(x*TAILLE, y*TAILLE+68, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+3, y*TAILLE+70);
+                g.drawOval(x*TAILLE, y*TAILLE+68, 30,30);
+                g.drawString(j.getNom(),x*TAILLE+10, y*TAILLE+88);
             }
 
             if(j == this.modele.getjoueurs().get(3)){
-                g.setColor(Color.YELLOW);
-                g.drawOval(x*TAILLE+50, y*TAILLE+50, 30,30);
-                g.fillOval(x*TAILLE+50, y*TAILLE+50, 30,30);
+                if(j == modele.getjoueurAct()){
+                    if(j.getPosition().getEtat() == 0)g.setColor(Color.BLACK);
+                    else g.setColor(Color.WHITE);
+                    g.drawString("→",x*TAILLE+50, y*TAILLE+88);
+                }
+
+                
+                g.setColor(new Color(190,0,190));
+                g.fillOval(x*TAILLE+68, y*TAILLE+68, 30,30);
                 g.setColor(Color.BLACK);
-                g.drawString(j.getNom(),x*TAILLE+53, y*TAILLE+70);
+                g.drawOval(x*TAILLE+68, y*TAILLE+68, 30,30);
+                g.setColor(Color.WHITE);
+                g.drawString(j.getNom(),x*TAILLE+78, y*TAILLE+88);
             }
         }
     } 
+
+    private void placeHeliport(Graphics g, Zone z, int x, int y){
+        if(z.aHeli()){
+            g.setColor(Color.BLACK);
+            g.fillRect(x*TAILLE-1, y*TAILLE + TAILLE/2-10, TAILLE, 20);
+            g.fillRect(x*TAILLE+ TAILLE/2-10, y*TAILLE, 20, TAILLE);
+            g.drawRect(x*TAILLE, y*TAILLE + TAILLE/2-10, TAILLE, 20);
+            g.setColor(Color.WHITE);
+            g.drawString("HELIPORT",x*TAILLE+20, y*TAILLE + TAILLE/2+5);
+            g.setColor(new Color(223,175,44));
+            g.fillRect(x*TAILLE-1, y*TAILLE + TAILLE/2-10, 20, 20);
+            g.fillRect(x*TAILLE+83, y*TAILLE + TAILLE/2-10, 20, 20);
+            g.fillRect(x*TAILLE+ TAILLE/2-10, y*TAILLE-1, 20, 20);
+            g.fillRect(x*TAILLE+ TAILLE/2-10, y*TAILLE+83, 20, 20);
+        }
+    }
+
+    private void gameOver(Graphics g){
+        g.setColor(Color.RED);
+        g.fillRect((2)* TAILLE/2, (4)* TAILLE/2, 4*TAILLE, 2*TAILLE);
+        g.setColor(Color.BLACK);
+        g.drawString("GAME OVER",3*TAILLE-35, 3*TAILLE);
+
+    }
+
+    private void gameWin(Graphics g){
+        g.setColor(Color.WHITE);
+        g.fillRect((2)* TAILLE/2, (4)* TAILLE/2, 4*TAILLE, 2*TAILLE);
+        g.setColor(Color.BLACK);
+        g.drawString("WINNERS",3*TAILLE-35, 3*TAILLE);
+
+    }
 }

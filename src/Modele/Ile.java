@@ -111,7 +111,18 @@ public class Ile {
             }
         }
         return cpt == taille*taille;
+    }
 
+    public boolean ileInondee(){
+        int cpt= 0;
+        for (int i = 0; i < taille; i++) {
+            for (int j = 0; j < taille; j++) {
+                if(this.getZone(i,j).getEtat() != 0){
+                    cpt++;
+                }
+            }
+        }
+        return cpt == taille*taille;
     }
 
     public Zone randomZone(){
@@ -135,6 +146,15 @@ public class Ile {
         return getZone(x,y);
     }
 
+    public Zone randomZoneVide(){
+        Zone z = randomZone();
+        while(z.aHeli() || z.aCle() || z.aTresor()){
+            z = randomZone();
+        }
+        return z;
+    }
+
+/* 
     public ArrayList<Zone> neighbours(Zone p) {
         ArrayList<Zone> neighbours = new ArrayList<Zone>();
         neighbours.add(this.getZone(p.getCoord().x, p.getCoord().y + 1));
@@ -142,15 +162,5 @@ public class Ile {
         neighbours.add(this.getZone(p.getCoord().x + 1, p.getCoord().y));
         neighbours.add(this.getZone(p.getCoord().x - 1, p.getCoord().y));
         return neighbours;
-    }
-
-/*     public ArrayList<Integer> getCoordLine(int y) {
-        ArrayList<Integer> s = new ArrayList<Integer>();
-        for (int index = 0; index < grid.taille(); index++) {
-            if (grid.get(y).get(index) != null) {
-                s.add(index);
-            }
-        }
-        return s;
     } */
 }
