@@ -6,38 +6,29 @@ import javax.swing.JPanel;
 
 //Zone
 public class Zone extends JPanel{
-    //private Modele modele;
     private Point c;
     private int etat;  // 0 : normale ; 1 : submergé ; 2 :  inondée
-    private int cle; // -1 pas de Cle
-    private int tresor; // -1 pas de Tresor
-    private boolean heli; 
+    private Cle aCle;
+    private Tresor aTresor; 
+    
 
     public Zone(int x, int y){
         this.c = new Point(x, y);
-        //setPreferredSize(new Dimension(60, 60));
+        setPreferredSize(new Dimension(60, 60));
         this.etat = 2;
-        this.cle = -1;
-        this.tresor = -1;
-        this.heli = false;
     }
 
-    public Zone(Modele m,int x, int y, int e){
+    public Zone(int x, int y, int e){
         this.c = new Point(x, y);
         this.etat = e;
-        //setPreferredSize(new Dimension(60, 60));
+        setPreferredSize(new Dimension(60, 60));
         
     }
 
     public Point getCoord(){return this.c;}
     public int getEtat(){return this.etat;}
-    public boolean aCle(){return this.cle > -1 ;}
-    public boolean aTresor(){return this.tresor > -1 ;}
-    public int getCle(){return this.cle;}
-    public int getTresor(){return this.tresor;}
-    public boolean aHeli(){return this.heli;}
-
-
+    public Cle getCle(){return this.aCle;}
+    public Tresor getTresor(){return this.aTresor;}
 
     public void setEtat(int e){
         if(e == 0){setBackground(Color.GREEN);}
@@ -45,12 +36,6 @@ public class Zone extends JPanel{
         else setBackground(Color.BLACK);
         this.etat = e;
     }
-    public void poseHeli(){this.heli = true;}
-    public void donneCle(int  c){this.cle = c;} //Levée d'exception éventuelle
-    public void donneTresor(int t){this.tresor = t;}
-
-    public void enleveCle(){this.cle = -1;}
-    public void enleveTresor(){this.tresor = -1;}
 
     public void noie(){
         int et = this.etat;
@@ -66,7 +51,7 @@ public class Zone extends JPanel{
         }
     }
 
-    /* public String toString(){
+    public String toString(){
 
         String s = " ";
         if(this.aCle != null){
@@ -77,7 +62,7 @@ public class Zone extends JPanel{
         }
 
         return this.etat+s;
-    } */
+    }
 
 
 }
