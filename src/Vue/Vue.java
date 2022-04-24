@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import Modele.*;
+import Controleur.*;
 
 public class Vue extends JFrame {
     private Modele modele;
@@ -12,6 +13,7 @@ public class Vue extends JFrame {
     private Menu setup;
     private VueCommandes commandes;
     private VueGrille grille;
+    private ControlFinTour c;
     private VueJoueur joue;
     final int height = 200;
     final int width = 200;
@@ -30,7 +32,7 @@ public class Vue extends JFrame {
 
         //this.setup = new Menu(this.modele, this);
         //frame.add(setup);
-        this.grille = new VueGrille(modele);
+        this.grille = new VueGrille(modele,c);
 
         frame.add(grille,BorderLayout.CENTER);
         this.commandes = new VueCommandes(modele);

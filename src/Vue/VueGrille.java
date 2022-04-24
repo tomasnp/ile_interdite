@@ -1,18 +1,24 @@
 package Vue;
 import java.awt.*;
-
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 import Modele.*;
+import Controleur.*;
 
-public class VueGrille extends JPanel implements Observer{
+public class VueGrille extends JPanel implements Observer,MouseListener{
     private Modele modele;
+    private ControlGrille controle;
     
     final public int TAILLE = 100;
     
-    public VueGrille(Modele il){
-        this.modele = il;
-        il.addObserver(this);
+    public VueGrille(Modele m,ControlFinTour c){
+        this.modele = m;
+        this.controle =  new ControlGrille(m);;
+        m.addObserver(this);
+        addMouseListener(this);
+        
 
         Dimension dim = new Dimension(TAILLE*modele.getIle().gettaille(), 
         TAILLE*modele.getIle().gettaille());
@@ -23,6 +29,7 @@ public class VueGrille extends JPanel implements Observer{
 
     public void paintComponent(Graphics g) {
         super.repaint();
+        
         for(int i=0; i<modele.getIle().gettaille(); i++) {
             for(int j=0; j<modele.getIle().gettaille(); j++) {
                 Zone z = modele.getIle().getZone(i, j);
@@ -30,26 +37,21 @@ public class VueGrille extends JPanel implements Observer{
                 /* if(modele.tom.getPosition() == modele.getZone(i, j)){
                     placeTom(g, modele.tom, i, j);
                 } */
+                placeTresor(g,z,i,j);
+                placeCle(g, z, i, j);
+                placeHeliport(g, z, i, j);
                 for(int k = 0; k < this.modele.getjoueurs().size(); k++){
                     if(this.modele.getjoueurs().get(k).getPosition() == z){
                         placeJoueurs(g, modele.getjoueurs().get(k), i, j);
                     }
                 }
-                placeTresor(g,z,i,j);
-                placeHeliport(g, z, i, j);
+                
 
 
             }
         }
-        if(modele.PartiePerdu()){
-            gameOver(g);
-
-        }
-
-        if(modele.PartieGagnee()){
-            gameWin(g);
-
-        }
+        if(modele.PartiePerdu()){gameOver(g);}
+        if(modele.PartieGagnee()){gameWin(g);}
     }
 
     private void paint(Graphics g, Zone z, int x, int y) {
@@ -87,7 +89,7 @@ public class VueGrille extends JPanel implements Observer{
         }
     }
 
-     private void placeTresor(Graphics g, Zone z, int x, int y){
+    private void placeTresor(Graphics g, Zone z, int x, int y){
         if(z.getTresor()==0){
             g.setColor(new Color(255,132,0));
             g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 50, 20);
@@ -120,6 +122,41 @@ public class VueGrille extends JPanel implements Observer{
         }
 
     } 
+
+    private void placeCle(Graphics g, Zone z, int x, int y){
+        if(z.getCle()==0){
+            g.setColor(new Color(255,132,0));
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            g.setColor(Color.BLACK);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            //g.drawString("FEU",x*TAILLE+37, y*TAILLE + TAILLE/2+5);
+        }
+        if(z.getCle()==1){
+            g.setColor(new Color(88,41,0));
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            g.setColor(Color.WHITE);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            //g.drawString("TERRE",x*TAILLE+30, y*TAILLE + TAILLE/2+5);
+        }
+
+        if(z.getCle()==2){
+            g.setColor(new Color(0,0,120));
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            g.setColor(Color.WHITE);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            //g.drawString("EAU",x*TAILLE+37, y*TAILLE + TAILLE/2+5);
+        }
+
+        if(z.getCle()==3){
+            g.setColor(Color.WHITE);
+            g.fillRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            g.setColor(Color.BLACK);
+            g.drawRect(x*TAILLE+25, y*TAILLE + TAILLE/2-10, 20, 10);
+            //g.drawString("AIR",x*TAILLE+37, y*TAILLE + TAILLE/2+5);
+        }
+
+    } 
+
 
 
     private void placeJoueurs(Graphics g, Joueur j, int x, int y){
@@ -294,5 +331,29 @@ public class VueGrille extends JPanel implements Observer{
         g.setColor(Color.BLACK);
         g.drawString("WINNERS",3*TAILLE-35, 3*TAILLE);
 
+    } 
+
+
+    public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        System.out.print(x+" ");
+        System.out.println(y+" ");
+        
+        int x_case = x / (TAILLE );
+        int y_case = y / (TAILLE);
+        this.controle.clique(x_case, y_case,modele.getActSpe());
     }
-}
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+} 

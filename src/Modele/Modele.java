@@ -11,15 +11,11 @@ public class Modele extends Observable{
     private ArrayList<Integer> tresors;
     public Joueur tom;
     private int joueurAct;
+    private int ActionSpe;
 
     public Modele(int size) {
         this.ile = new Ile(size);
         joueurs = new ArrayList<Joueur>();
-        cles = new ArrayList<Integer>();
-        this.cles.add(0);
-        this.cles.add(1);
-        this.cles.add(2);
-        this.cles.add(3);
         tresors = new ArrayList<Integer>();
         this.tresors.add(0);
         this.tresors.add(1);
@@ -32,6 +28,16 @@ public class Modele extends Observable{
 
         this.ile.randomZoneVide().poseHeli();
 
+        cles = new ArrayList<Integer>();
+        this.cles.add(0);
+        this.cles.add(1);
+        this.cles.add(2);
+        this.cles.add(3);
+
+        for(int i = 0; i< tresors.size(); i++){
+            this.ile.randomZoneVide().donneCle(i);
+        }
+
         this.tom = new Joueur("1", ile.randomZone());
         Joueur tom2 = new Joueur("2", ile.randomZone());
         Joueur tom3 = new Joueur("3", ile.randomZone());
@@ -40,6 +46,8 @@ public class Modele extends Observable{
         joueurs.add(tom2);
         joueurs.add(tom3);
         joueurs.add(tom4);
+
+        this.ActionSpe = -1;
     }
 
     public Ile getIle() {
@@ -54,6 +62,7 @@ public class Modele extends Observable{
         return this.joueurs.get(joueurAct);
     }
 
+    public int getActSpe(){return ActionSpe;}
     public ArrayList<Joueur> getjoueurs(){return this.joueurs;};
 
     public int getCle(int c){return this.cles.get(c);}
@@ -62,7 +71,9 @@ public class Modele extends Observable{
 
     //Setters
 
-    public void enleveCle(int c){this.cles.remove(c);}
+    public void enleveCle(int c){this.cles.remove(cles.indexOf(c));}
+
+    public void setActSpe(int j){ActionSpe = j;}
 
     public void joueurSuiv() {
         this.joueurAct = (this.joueurAct + 1) % this.joueurs.size();
@@ -167,6 +178,16 @@ public class Modele extends Observable{
 
     //Méthodes d'assèchement
 
+    public void asseche(Zone z){
+
+        if(z.getEtat()==1 && getjoueurAct().getActionSacSable()){
+            z.setEtat(0);
+            getjoueurAct().utiliseSacSable();
+        }
+
+        /** METTRE EVENTUELLEMENT UN MESSAGE D'ERREUR EN ELSE QUAND ON LE POURRA**/
+    }
+
     public void assecheSurPlace(){
 
         Joueur j = getjoueurAct();
@@ -267,7 +288,7 @@ public class Modele extends Observable{
         int y = j.getPosition().getCoord().y;
         Zone z = this.getZone(x,y);
 
-        if((z.aTresor()) /*&& j.aCle(z.getTresor())*/){
+        if((z.aTresor()) && j.aCle(z.getTresor())==1){
             j.ajouteTresor(z.getTresor());
             z.enleveTresor();
             int nbAct = j.getNbActions() - 1;
@@ -279,13 +300,47 @@ public class Modele extends Observable{
         }
     }
 
+    public void chercheCle(){
+
+        Joueur j = getjoueurAct();
+        int x = j.getPosition().getCoord().x;
+        int y = j.getPosition().getCoord().y;
+        Zone z = this.getZone(x,y);
+
+        if(z.aCle()){
+            int c = z.getCle();
+            j.ajouteCle(c);
+            z.enleveCle();
+            this.enleveCle(c);
+            int nbAct = j.getNbActions() - 1;
+            j.setAction(nbAct);
+            if(nbAct == 0){
+                j.resetAction();
+                FinTour();
+            }
+        }else{
+            int i = this.getIle().getRand().nextInt(1,3);
+            if(i==1 && z.getCle() < 2){
+                z.setEtat(z.getEtat()+1);
+            }
+            int nbAct = j.getNbActions() - 1;
+            j.setAction(nbAct);
+            if(nbAct == 0){
+                j.resetAction();
+                FinTour();
+            }
+        }
+    }
+
+
     //Méthode pour donner (ou pas) une clé au hasard au joueur en fin de tour
 
     public void cleHasard(){
         Joueur j = getjoueurAct();
         int i = this.getIle().getRand().nextInt(1,3);
         if(i==1 && this.clesSize()>0){
-            int c = this.getCle(this.getIle().getRand().nextInt(0,this.clesSize()));
+            int c = //this.getCle(this.getIle().getRand().nextInt(0,this.clesSize()));
+            this.getCle(this.cles.get(getIle().getRand().nextInt(0,this.clesSize())));
             j.ajouteCle(c);
             this.enleveCle(c); //A BIEN VERIFIER
             this.getIle().enleveCle(c);
@@ -344,6 +399,7 @@ public class Modele extends Observable{
         }
         z3.noie();
         notifyObservers();
+        cleHasard();
         this.joueurSuiv();
     }
 }

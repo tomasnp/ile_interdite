@@ -21,6 +21,5 @@ public class Projet {
                 //v.start(); 
         });
 
-        
     }
 }

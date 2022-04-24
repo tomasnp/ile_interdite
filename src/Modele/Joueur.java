@@ -2,10 +2,11 @@ package Modele;
 
 import java.util.ArrayList;
 
-
  // Players
 public class Joueur {
     private int nbActions;
+    private boolean actionHelico;
+    private boolean actionSacSable;
 
     private Zone position;
     private String nom;
@@ -19,6 +20,8 @@ public class Joueur {
         this.tresors = new ArrayList<Integer>();
         this.nbActions = 3;
         position = zone;
+        actionHelico =true;
+        actionSacSable =true;
     }
 
     // Setter
@@ -42,6 +45,13 @@ public class Joueur {
     public int getNbActions() {
         return this.nbActions;
     }
+
+    public boolean getActionHeli(){
+        return actionHelico;
+    } 
+    public boolean getActionSacSable(){
+        return actionSacSable;
+    } 
 
     public int aCle(int i){
         if(this.cles.size() == 0){return 0;}
@@ -71,9 +81,17 @@ public class Joueur {
 
     public void ajouteTresor(int i){this.tresors.add(i);}
 
+    public void donneHelico(){this.actionHelico = true;}
+    public void donneSacSable(){this.actionSacSable = true;}
+
+    public void utiliseHelico(){this.actionHelico = false;}
+    public void utiliseSacSable(){this.actionSacSable = false;}
+
     public void deplace(Zone z) {
-        this.position = z;
-        this.nbActions--;
+        if(z.getEtat() !=2 && getActionHeli()){
+            this.position = z;
+            this.utiliseHelico();
+        }
     }
 
     public String getComment() {

@@ -46,6 +46,7 @@ public class Zone extends JPanel{
         this.etat = e;
     }
     public void poseHeli(){this.heli = true;}
+    public void donneCle(int  c){this.cle = c;} //Levée d'exception éventuelle
     public void donneTresor(int t){this.tresor = t;}
 
     public void enleveCle(){this.cle = -1;}
