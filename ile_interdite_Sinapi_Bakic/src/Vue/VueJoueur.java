@@ -112,7 +112,7 @@ public class VueJoueur extends JPanel implements Observer{
         String f = "FEU , ";
         String t = "TERRE , ";
         String e = "EAU , ";
-        String a = "AIR";
+        String a = "AIR ,";
         label.setText("Joueur " + j.getNom() + " : " +
                 "Cles : " + f.repeat(j.aCle(00))+ t.repeat(j.aCle(01)) + e.repeat(j.aCle(02)) +  a.repeat(j.aCle(03))
                 + f.repeat(j.aCle(10))+ t.repeat(j.aCle(11)) + e.repeat(j.aCle(12)) +  a.repeat(j.aCle(13))
