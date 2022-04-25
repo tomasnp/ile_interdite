@@ -40,7 +40,7 @@ public class VueGrille extends JPanel implements Observer,MouseListener{
                     placeTom(g, modele.tom, i, j);
                 } */
                 placeTresor(g,z,i,j);
-                placeCle(g, z, i, j);
+                //placeCle(g, z, i, j);
                 placeHeliport(g, z, i, j);
                 for(int k = 0; k < this.modele.getjoueurs().size(); k++){
                     if(this.modele.getjoueurs().get(k).getPosition() == z){
