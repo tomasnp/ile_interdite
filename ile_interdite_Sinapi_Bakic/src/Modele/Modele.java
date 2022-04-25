@@ -584,19 +584,19 @@ public class Modele extends Observable{
 
     public void FinTour(){
         Zone z1 = this.getIle().randomZone();
-        //z1.noie();
+        z1.noie();
         Zone z2 = this.getIle().randomZone();
         while(z1 == z2){
             z2 = this.getIle().randomZone();
             if(this.getIle().ileInondee() || this.getIle().ileSubmerg())break;
         }
-        //z2.noie();
+        z2.noie();
         Zone z3 = this.getIle().randomZone();
         while(z3 == z2 || z3 == z1){
             z3= this.getIle().randomZone();
             if(this.getIle().ileInondee() || this.getIle().ileSubmerg())break;
         }
-        //z3.noie();
+        z3.noie();
         cleHasard();
         notifyObservers();
         this.joueurSuiv();
