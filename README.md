@@ -1,5 +1,5 @@
 # Ile Interdite
-
+![alt text](jeu.png)
 			Projet Île Interdite
 				
 				Thomas Sinapi et Stevan Bakic
